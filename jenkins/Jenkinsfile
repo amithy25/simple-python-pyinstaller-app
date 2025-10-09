@@ -55,7 +55,7 @@ pipeline {
             environment {
                 NEXUS_USER = 'admin'
                 NEXUS_PASS = 'admin'   
-                NEXUS_REPO = 'raw-hosted' 
+                NEXUS_REPO = 'Simple-python-app-artifacts' 
             }
             steps {
                 sh '''
