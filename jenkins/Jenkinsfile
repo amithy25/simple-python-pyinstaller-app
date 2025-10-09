@@ -4,6 +4,7 @@ pipeline {
     environment {
         NEXUS_URL = "http://72.44.49.32:8081"
         NEXUS_CREDENTIAL_ID = "nexus-credentials"
+        SONARQUBE_URL = "http://sonarqube:9000"
     }
 
     stages {
@@ -44,6 +45,20 @@ pipeline {
             post {
                 success {
                     archiveArtifacts 'dist/add2vals.tar.gz'
+                }
+            }
+        }
+
+           stage('SonarQube Analysis') {
+            steps {
+                withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
+                    sh '''
+                        mvn sonar:sonar \
+                        -Dsonar.projectKey=simple-python-pyinstaller-app \
+                        -Dsonar.projectName='Simple Python Pyinstaller App' \
+                        -Dsonar.host.url=${SONARQUBE_URL} \
+                        -Dsonar.token=${SONAR_TOKEN}
+                    '''
                 }
             }
         }
